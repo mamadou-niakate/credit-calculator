@@ -19,7 +19,42 @@ function Simulator() {
 
     }
 
-    let calculAmortissement = (montant, tauxMensuel, mois, annee) => {
+    // let calculAmortissement = (montant, tauxMensuel, mois, annee) => {
+    //     let remboursementMensuel = calculMensualite(montant, tauxMensuel, mois);
+    //     let balance = montant; // total
+    //     let amortissementY = [];
+    //     let amortissementM = [];
+    //     for (let y=0; y<annee; y++) {
+    //         let interestY = 0;  //Interest payment for year y
+    //         let montantY = 0; //montant payment for year y
+    //         for (let m=0; m<12; m++) {
+    //             let interestM = balance * tauxMensuel;       //Interest payment for month m
+    //             let montantM = remboursementMensuel - interestM; //montant payment for month m
+    //             interestY = interestY + interestM;
+    //             montantY = montantY + montantM;
+    //             balance = balance - montantM;
+    //             amortissementM.push({remboursementMensuel, capitalAmorti:montantM, interet:interestM, capitalRestantDu : balance});
+    //         }
+    //         amortissementY.push({remboursementMensuel, capitalAmorti:montantY, interet:interestY, capitalRestantDu : balance});
+    //     }
+        
+    //     return {remboursementMensuel, amortissementY , amortissementM};
+    // };
+
+    const onChangeInput = e => {
+        const newData = {...inputs, [e.target.name]: e.target.value};
+        setInput(newData);
+    }
+
+
+    useEffect(() => {
+        const {amount,year,rate} = inputs;
+
+        let montant = parseFloat(amount);
+        let tauxMensuel = parseFloat(rate)/100/12;
+        let mois = year*12;
+        let annee = year;
+
         let remboursementMensuel = calculMensualite(montant, tauxMensuel, mois);
         let balance = montant; // total
         let amortissementY = [];
@@ -37,19 +72,8 @@ function Simulator() {
             }
             amortissementY.push({remboursementMensuel, capitalAmorti:montantY, interet:interestY, capitalRestantDu : balance});
         }
-        
-        return {remboursementMensuel, amortissementY , amortissementM};
-    };
 
-    const onChangeInput = e => {
-        const newData = {...inputs, [e.target.name]: e.target.value};
-        setInput(newData);
-    }
-
-
-    useEffect(() => {
-        const {amount,year,rate} = inputs;
-        let {amortissementM} = calculAmortissement(parseFloat(amount),parseFloat(rate)/100/12,year*12,year);
+        //let {amortissementM} = calculAmortissement(parseFloat(amount),parseFloat(rate)/100/12,year*12,year);
         setAmortissement(amortissementM)
     }, [inputs])
 
